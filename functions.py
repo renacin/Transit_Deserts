@@ -85,7 +85,10 @@ def find_closest_pc(centroid_df, pc_df, num):
         distance_list.append(min_distance_value)
 
         # Monitor Progress
-        print("Progress: " + str(counter_x) + "/" + str(centroid_df_len) + ", Distance: " + str(round(min_distance_value, 2)))
+        if counter_x % 1000 == 0:
+            print("Worker: " + str(num) + ", Progress: " + str(counter_x) + "/" + str(centroid_df_len))
+        else:
+            pass
 
         # Del Column Just Created
         focus_df.drop(["D_To_C"], axis=1)
@@ -93,7 +96,7 @@ def find_closest_pc(centroid_df, pc_df, num):
         # Add To Counter
         counter_x += 1
 
-    centroid_df["Distances"] = closest_pc_list
+    centroid_df["Distances"] = distance_list
 
     # Save As CSV
     centroid_df.to_csv(r"C:\Users\renac\Desktop\Transit_Data\Data\Data_" + str(num) + ".csv", index=False)
