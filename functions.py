@@ -25,13 +25,13 @@ def bounding_box_df(focus_lat, focus_long, pc_df, distance_):
         long_range.append(destination.longitude)
 
     # Return A Version Of PC_Location_DF, That Extends Only To Identified Range
-    pc_loc_long = pc_df[pc_df['Long'].between(min(long_range), max(long_range), inclusive=True)]
-    pc_loc_ = pc_loc_long[pc_loc_long['Lat'].between(min(lat_range), max(lat_range), inclusive=True)]
+    pc_loc_long = pc_df[pc_df['Longitude'].between(min(long_range), max(long_range), inclusive=True)]
+    pc_loc_ = pc_loc_long[pc_loc_long['Latitude'].between(min(lat_range), max(lat_range), inclusive=True)]
     return pc_loc_
 
 
 # This Function Will Find The Closest Postal Code To A Centroid, And Return A List That Matches The Index Of The Centroid File
-def find_closest_pc(centroid_df, pc_df, num):
+def find_closest_pc(centroid_df, pc_df, num, return_dict):
 
     # Data To Be Collected
     distance_list = []
@@ -46,16 +46,16 @@ def find_closest_pc(centroid_df, pc_df, num):
     distance_km = initial_distance
 
     for index, row_c in centroid_df.iterrows():
-        centroid_location = geopy.Point(row_c["LATITUDE"], row_c["LONGITUDE"])
+        centroid_location = geopy.Point(row_c["Latitude"], row_c["Longitude"])
 
         # Keep Trying Until A Good Distance Value Is Found & Utilized
         while True:
             try:
                 # Find Focus Values & Add Index As A Column
-                focus_df = bounding_box_df(row_c["LATITUDE"], row_c["LONGITUDE"], pc_df, distance_km)
+                focus_df = bounding_box_df(row_c["Latitude"], row_c["Longitude"], pc_df, distance_km)
 
                 # Find Closest Postal Code To Focus Centroid
-                focus_df["D_To_C"] = focus_df.apply(lambda row: geodesic(centroid_location, geopy.Point(row["Lat"], row["Long"])), axis=1)
+                focus_df["D_To_C"] = focus_df.apply(lambda row: geodesic(centroid_location, geopy.Point(row["Latitude"], row["Longitude"])), axis=1)
                 val_list = focus_df["D_To_C"].tolist()
 
                 # Find Min Distance
@@ -85,7 +85,7 @@ def find_closest_pc(centroid_df, pc_df, num):
         distance_list.append(min_distance_value)
 
         # Monitor Progress
-        if counter_x % 1000 == 0:
+        if (counter_x % 2 == 0) or (counter_x == centroid_df_len):
             print("Worker: " + str(num) + ", Progress: " + str(counter_x) + "/" + str(centroid_df_len))
         else:
             pass
@@ -98,5 +98,5 @@ def find_closest_pc(centroid_df, pc_df, num):
 
     centroid_df["Distances"] = distance_list
 
-    # Save As CSV
-    centroid_df.to_csv(r"C:\Users\renac\Desktop\Transit_Data\Data\Data_" + str(num) + ".csv", index=False)
+    # Have Workers Add To One File, Writing To Multiple CSVs Is Poor Programming, Return DF To Queue
+    return centroid_df
