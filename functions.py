@@ -31,7 +31,7 @@ def bounding_box_df(focus_lat, focus_long, pc_df, distance_):
 
 
 # This Function Will Find The Closest Postal Code To A Centroid, And Return A List That Matches The Index Of The Centroid File
-def find_closest_pc(centroid_df, pc_df, num, return_dict):
+def find_closest_pc(centroid_df, pc_df, num):
 
     # Data To Be Collected
     distance_list = []
@@ -101,4 +101,4 @@ def find_closest_pc(centroid_df, pc_df, num, return_dict):
     # Have Workers Add To One File, Writing To Multiple CSVs Is Poor Programming, Return DF To Queue
     return centroid_df
 
-    # Need To Prop Implement Combination Procedure 
+    # Need To Prop Implement Combination Procedure
