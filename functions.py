@@ -5,6 +5,8 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import geopy
 from geopy.distance import VincentyDistance, geodesic
+import os
+from os import listdir
 import pandas as pd
 import time
 import math
@@ -100,3 +102,30 @@ def find_closest_pc(centroid_df, pc_df, num):
 
     # Have Workers Add To One File, Writing To Multiple CSVs Is Poor Programming, Return DF To Queue
     centroid_df.to_csv(r"C:\Users\renac\Documents\Data\Brampton_Massing\Raw_Data\Data\DF_" + str(num) + ".csv", index=False)
+
+# This Function Will Combine Dataframes
+def comb_df(path):
+    # Get Files In Path
+    files = os.listdir(path)
+
+    # Append Data To First CSV
+    df_1_path = path + "\\" + files[0]
+    df_1 = pd.read_csv(df_1_path)
+
+    # Loop Through Files And Add Data To Main DF
+    for file_num in range(1, len(files)):
+        # Find Secondary DF
+        df_add_path = path + "\\" + files[file_num]
+        df_add = pd.read_csv(df_add_path)
+
+        # Combine DFs
+        frames = [df_1, df_add]
+        df_1 = pd.concat(frames)
+
+    # Create The Final CSV
+    df_1.to_csv(path + "\\" + "Dataframe.csv", index=False)
+
+    # Delete Files In Folder
+    for file in files:
+        del_path = path + "\\" + file
+        os.remove(del_path)

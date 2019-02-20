@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import multiprocessing as mp
 from psutil import virtual_memory
-from functions import find_closest_pc
+from functions import find_closest_pc, comb_df
 import pandas as pd
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -65,3 +65,6 @@ if __name__ == "__main__":
     # Start Multiprocessing
     for chunk in range(num_chunks):
         exec("p_" + str(chunk + 1) + ".start()")
+
+    # Combine CSV Files
+    comb_df(r"C:\Users\renac\Documents\Data\Brampton_Massing\Raw_Data\Data")
