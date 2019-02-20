@@ -10,7 +10,7 @@ import pandas as pd
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Import Massing Data
-massing_path = r"C:\Users\renac\Documents\Data\Brampton_Massing\Raw_Data\Data_Test.csv"
+massing_path = r"C:\Users\renac\Documents\Data\Brampton_Massing\Raw_Data\Data.csv"
 massing_data_df = pd.read_csv(massing_path)
 
 massing_data_df = massing_data_df.copy()
@@ -65,8 +65,3 @@ if __name__ == "__main__":
     # Start Multiprocessing
     for chunk in range(num_chunks):
         exec("p_" + str(chunk + 1) + ".start()")
-
-    # Collect Data From Queue
-    #print(return_dict.values())
-
-    # Fix Combination Issue

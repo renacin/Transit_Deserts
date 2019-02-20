@@ -85,7 +85,7 @@ def find_closest_pc(centroid_df, pc_df, num):
         distance_list.append(min_distance_value)
 
         # Monitor Progress
-        if (counter_x % 2 == 0) or (counter_x == centroid_df_len):
+        if (counter_x % 1000 == 0) or (counter_x == centroid_df_len):
             print("Worker: " + str(num) + ", Progress: " + str(counter_x) + "/" + str(centroid_df_len))
         else:
             pass
@@ -99,6 +99,4 @@ def find_closest_pc(centroid_df, pc_df, num):
     centroid_df["Distances"] = distance_list
 
     # Have Workers Add To One File, Writing To Multiple CSVs Is Poor Programming, Return DF To Queue
-    return centroid_df
-
-    # Need To Prop Implement Combination Procedure
+    centroid_df.to_csv(r"C:\Users\renac\Documents\Data\Brampton_Massing\Raw_Data\Data\DF_" + str(num) + ".csv", index=False)
